@@ -43,14 +43,14 @@ private:
     struct sockaddr_in server_addr_;
 
     boost::thread server_thread_;
-    boost::thread_group client_thread_group_;
+    boost::thread process_thread_;
     boost::mutex client_num_mutex_;
 
     std::list<OnlineUser*> online_user_list_;
 
     const pthread_t main_thread_;
-    void startServer();
-    void clientThread(int client_fd);
+    void acceptThread();
+    void messageProcessThread();
     void addClientNum();
     void reduceClientNum();
 };

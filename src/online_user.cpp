@@ -47,7 +47,7 @@ void OnlineUser::reciveMessageThread()
         else if(strlen(recv_message_) != 0)
         {
             printf("I'm %s, I recive message: %s\n", user_ip_, recv_message_);
-            sendMessage("I'm server, I recive message success");
+            // sendMessage("I'm server, I recive message success");
         }
         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
     }

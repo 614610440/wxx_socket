@@ -55,11 +55,12 @@ bool TCPServer::setServer(bool loopback_address, int port)
 
     server_enable_ = true;
     
-    server_thread_ = boost::thread(boost::bind(&TCPServer::startServer, this));
+    server_thread_ = boost::thread(boost::bind(&TCPServer::acceptThread, this));
+    process_thread_ = boost::thread(boost::bind(&TCPServer::messageProcessThread, this));
     return true;
 } 
 
-void TCPServer::startServer()
+void TCPServer::acceptThread()
 {
     while (server_enable_)
     {
@@ -93,20 +94,13 @@ void TCPServer::startServer()
             OnlineUser *new_user = new OnlineUser(user_ip, accept_fd);
             online_user_list_.push_back(new_user);
         }
-        // boost::thread *client_thread = new boost::thread(boost::bind(&TCPServer::clientThread, this, accept_fd));
-        // client_thread_group_.add_thread(client_thread);
         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
     }
 }
 
-void TCPServer::clientThread(int client_fd)
+void TCPServer::messageProcessThread()
 {
-    addClientNum();
-    while (server_enable_)
-    {
-        printf("I'm client: %d\n", client_fd);
-        boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-    }
+
 }
 
 // bool TCPServer::sendMessage(char* message)

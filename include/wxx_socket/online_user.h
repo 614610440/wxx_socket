@@ -29,6 +29,7 @@ public:
     char* getUserIP();
 
     bool sendMessage(char* message);
+    bool getMessage(std::string &message);
 
 private:
     char* user_ip_;
@@ -44,6 +45,8 @@ private:
 
     boost::thread recive_message_thread_;
     boost::mutex message_mutex_;
+
+    std::vector<std::string> message_cache_;
 };
 }
 
