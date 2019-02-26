@@ -10,15 +10,12 @@
 #define _TCP_CLIENT_H_
 
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <unistd.h>
-#include <errno.h> 
+#include <errno.h>
+#include <boost/thread.hpp>
+
 #include "wxx_socket/wxx_sock_define.h"
 
 namespace wxx_socket
@@ -34,6 +31,7 @@ public:
     bool sendMessage(char* message);
     bool sendEncryptMessage(char* message);
     
+    void reciveMessageThread();
     void closeClient();
 
 private:
@@ -43,8 +41,11 @@ private:
     char* server_ip_;
     struct sockaddr_in server_addr_;
 
+    boost::thread recive_thread_;
+    boost::mutex message_mutex_;
+
+    char recv_message_[MESSAGE_SIZE];
     char send_message_[MESSAGE_SIZE];
-    char recive_message_[MESSAGE_SIZE];
     char private_key_[MAX_KEY_SIZE];
     char public_key_[MAX_KEY_SIZE];
 

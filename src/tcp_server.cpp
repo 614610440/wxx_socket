@@ -65,7 +65,7 @@ void TCPServer::startServer()
     {
         printf("I'm server\n");
         struct sockaddr_in addr_client;
-        socklen_t addr_len;
+        socklen_t addr_len = sizeof(addr_client);
 
         int accept_fd = accept(server_sock_, (struct sockaddr*)&addr_client, &addr_len);
         if (accept_fd < 0)
@@ -75,8 +75,26 @@ void TCPServer::startServer()
         }
 
         printf("create client thread\n");
-        boost::thread *client_thread = new boost::thread(boost::bind(&TCPServer::clientThread, this, accept_fd));
-        client_thread_group_.add_thread(client_thread);
+        char* user_ip = inet_ntoa(addr_client.sin_addr);
+        auto user_iterator = online_user_list_.begin();
+        for (; user_iterator != online_user_list_.end(); user_iterator++)
+        {
+            printf("ip: %s , %s\n", (*user_iterator)->getUserIP(), user_ip);
+            if (strcmp((*user_iterator)->getUserIP(), user_ip) == 0)
+            {
+                printf("ip: %s already exists\n", user_ip);
+                break;
+            }
+        }
+
+        if (user_iterator == online_user_list_.end())
+        {
+             printf("add ip: %s\n", user_ip);
+            OnlineUser *new_user = new OnlineUser(user_ip, accept_fd);
+            online_user_list_.push_back(new_user);
+        }
+        // boost::thread *client_thread = new boost::thread(boost::bind(&TCPServer::clientThread, this, accept_fd));
+        // client_thread_group_.add_thread(client_thread);
         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
     }
 }
@@ -90,6 +108,23 @@ void TCPServer::clientThread(int client_fd)
         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
     }
 }
+
+// bool TCPServer::sendMessage(char* message)
+// {
+//     message = encryptMessage(message);
+//     int send_result =  send(server_sock_, message, strlen(message), 0);
+
+//     if (send_result < 0)
+//     {
+//         printf("send error message: %s\n", message);
+//         return false;
+//     }
+//     else
+//     {
+//         printf("send success message: %s\n", message);
+//         return true;
+//     }
+// }
 
 void TCPServer::addClientNum()
 {

@@ -17,8 +17,11 @@ int main()
 
     while (true)
     {
-        boost::this_thread::sleep(boost::posix_time::milliseconds(100)); 
-        std::cout<<"I'm main"<<std::endl;
+        // char* message;
+        printf("send:");
+        // scanf("%s", &message);
+        // server.sendMessage(message);
+        boost::this_thread::sleep(boost::posix_time::seconds(60)); 
     }
     
 }

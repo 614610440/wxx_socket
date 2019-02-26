@@ -10,18 +10,14 @@
 #define _TCP_SERVER_H_
 
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <unistd.h>
 #include <errno.h> 
 #include <boost/thread.hpp>
 
 #include "wxx_socket/wxx_sock_define.h"
+#include "wxx_socket/online_user.h"
 
 namespace wxx_socket
 {
@@ -34,6 +30,7 @@ public:
 
     bool setServer(bool loopback_address, int port);
     bool getServerEnable();
+    // bool sendMessage(char* message);
 
     void closeServer();
 
@@ -48,6 +45,8 @@ private:
     boost::thread server_thread_;
     boost::thread_group client_thread_group_;
     boost::mutex client_num_mutex_;
+
+    std::list<OnlineUser*> online_user_list_;
 
     const pthread_t main_thread_;
     void startServer();

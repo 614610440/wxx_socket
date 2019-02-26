@@ -26,7 +26,7 @@ int ProducePrimeNumber(int prime[]);
 /* realize */
 char* encryptMessage(char* message)
 {
-    return "test";
+    return message;
 }
 
 char* decryptMessage(char* message)
