@@ -12,6 +12,7 @@
 using namespace wxx_socket;
 
 TCPClient::TCPClient()
+    : message_size_(MESSAGE_SIZE)
 {
     client_sock_ = socket(AF_INET, SOCK_STREAM, 0);
     if (client_sock_ < 0)
@@ -19,6 +20,8 @@ TCPClient::TCPClient()
         perror("client sock");
         return;
     }
+
+    setsockopt(client_sock_, SOL_SOCKET, SO_RCVBUF, (const char*)&message_size_, sizeof(int));
 }
 
 TCPClient::~TCPClient()

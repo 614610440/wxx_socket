@@ -18,20 +18,20 @@ add_library(${PROJECT_NAME}
     ${DIR_LIB_SRCS}
 )
 
-add_executable(tcp_client_demo demo/tcp_client_demo.cpp)
-target_link_libraries(tcp_client_demo
-${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
 boost_system
 boost_thread
 ${Boost_LIBRARIES}
 )
 
+add_executable(tcp_client_demo demo/tcp_client_demo.cpp)
+target_link_libraries(tcp_client_demo
+${PROJECT_NAME}
+)
+
 add_executable(tcp_server_demo demo/tcp_server_demo.cpp)
 target_link_libraries(tcp_server_demo
 ${PROJECT_NAME}
-boost_system
-boost_thread
-${Boost_LIBRARIES}
 )
 
 install(TARGETS ${PROJECT_NAME}

@@ -19,7 +19,7 @@ int main()
         char* message;
         printf("send...\n");
         // scanf("%s", &message);
-        client.sendMessage("message");
+        client.sendMessage("test_message");
         boost::this_thread::sleep(boost::posix_time::seconds(1));
     }
     

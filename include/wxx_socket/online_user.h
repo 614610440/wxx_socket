@@ -35,6 +35,8 @@ private:
     char* user_ip_;
     int client_fd_;
 
+    const int message_size_;
+
     double online_time_;
     double sleep_time_;
 

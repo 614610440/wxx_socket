@@ -41,6 +41,8 @@ private:
     char* server_ip_;
     struct sockaddr_in server_addr_;
 
+    const int message_size_;
+
     boost::thread recive_thread_;
     boost::mutex message_mutex_;
 

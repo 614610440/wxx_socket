@@ -14,16 +14,22 @@ using namespace wxx_socket;
 OnlineUser::OnlineUser()
     : online_time_(0),
       sleep_time_(0),
-      online_(false)
+      online_(false),
+      message_size_(MESSAGE_SIZE)
 {
 
 }
 
 OnlineUser::OnlineUser(char user_ip[], int client_fd)
+    : online_time_(0),
+      sleep_time_(0),
+      online_(false),
+      message_size_(MESSAGE_SIZE)
 {
     user_ip_ = user_ip;
     client_fd_ = client_fd;
     online_ = true;
+    setsockopt(client_fd_, SOL_SOCKET, SO_RCVBUF, (const char*)&message_size_, sizeof(int));
     recive_message_thread_ = boost::thread(boost::bind(&OnlineUser::reciveMessageThread, this));
 }
 
@@ -46,7 +52,7 @@ void OnlineUser::reciveMessageThread()
         }
         else if(strlen(recv_message_) != 0)
         {
-            printf("I'm %s, I recive message: %s\n", user_ip_, recv_message_);
+            printf("I'm %s, I recive size: %d message: %s\n", user_ip_, strlen(recv_message_), recv_message_);
             // sendMessage("I'm server, I recive message success");
         }
         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
